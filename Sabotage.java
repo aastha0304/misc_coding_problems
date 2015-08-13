@@ -1,4 +1,4 @@
-
+package hackerearth;
 
 /* IMPORTANT: class must not be public. */
 
@@ -7,7 +7,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
- class TestClass {
+ class TestClasssg {
 	static int findP(int[] parents, int u){
 		if(u!=parents[u])
 			parents[u] = findP(parents, parents[u]);
