@@ -1,13 +1,15 @@
 /* IMPORTANT: class must not be public. */
+
  
 /*
  * uncomment this if you want to read input.*/
+package hackerearth;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
  
 import java.util.StringTokenizer;
  
-class TestClass {
+class TestClassil {
     public static void main(String args[] ) throws Exception {
         /*
          * Read input from stdin and provide input before running

@@ -1,3 +1,4 @@
+package hackerearth;
 import java.io.BufferedReader;
  
 /* IMPORTANT: class must not be public. */
@@ -10,7 +11,7 @@ import java.util.Hashtable;
 import java.util.StringTokenizer;
  
  
- class TestClass {
+ class TestClasstour {
     public static void main(String args[] ) throws Exception {
         /*
          * Read input from stdin and provide input before running
