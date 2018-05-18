@@ -1,0 +1,95 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class RLE {
+	static String compressedString(String message) {
+		if(message == null || message.isEmpty())
+			return message;
+		StringBuilder result = new StringBuilder();
+	    int i = 0;
+	    int count = 0;
+	    while(i < message.length() - 1) {
+	        count++;
+	        if (message.charAt(i) != message.charAt(i + 1)) {
+	        	result.append(message.charAt(i));
+	        	if(count>1)
+	        		result.append(count);
+	            count = 0;
+	        }
+	        i++;
+	    }
+	    result.append(message.charAt(i));
+	    if(count>0)
+	    result.append(count + 1);
+	    return result.toString();
+    }
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(System.in);
+        final String fileName = System.getenv("OUTPUT_PATH");
+        BufferedWriter bw = null;
+        if (fileName != null) {
+            bw = new BufferedWriter(new FileWriter(fileName));
+        }
+        else {
+            bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        }
+
+        String res;
+        String message;
+        try {
+            message = in.nextLine();
+        } catch (Exception e) {
+            message = null;
+        }
+
+        res = compressedString(null);
+        System.out.println(res);
+        ////bw.write(res);
+        
+        //bw.newLine();
+        System.out.print(decode(res));
+
+        bw.close();
+        in.close();
+    }
+    public static String decode(String compressedString) {
+        int index = 0;
+        int numReps = 0;
+        char nextChar = ' ';
+        StringBuilder sb = new StringBuilder();
+        
+        while (index < compressedString.length())
+        {
+            numReps = 0;
+            char c = compressedString.charAt(index);
+            if (!Character.isDigit(c))
+            {
+                nextChar = c;
+                sb.append(nextChar);
+
+                index++;
+            }
+            else
+            {
+                while (Character.isDigit(c))
+                {
+                    int temp = Integer.parseInt(""+c);
+                    numReps = (numReps*10) + temp;
+                    index++;
+                    if (index >= compressedString.length()) break;
+                    c = compressedString.charAt(index);
+                }
+                for (int i =1; i<numReps; i++)
+                {
+                    sb.append(nextChar);
+                }
+            }
+        }
+        return sb.toString();
+    }
+}
