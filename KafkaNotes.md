@@ -100,7 +100,9 @@ For any filesystem used for data directories, on Linux systems, the following op
 * noatime: This option disables updating of a file's atime (last access time) attribute when the file is read. This can eliminate a significant number of filesystem writes, especially in the case of bootstrapping consumers. Kafka does not rely on the atime attributes at all, so it is safe to disable this.
 
 Kafka Connect can be paused!!!!
-
+```
+https://docs.confluent.io/current/connect/managing/community.html
+```
 
 
 
