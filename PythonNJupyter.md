@@ -47,3 +47,36 @@ To delete a jupyter kernel…
 ```
 jupyter kernelspec uninstall unwanted-kernel
 ```
+
+Working with Jupyter n Pyspark
+
+```
+export PYSPARK_PYTHON=python3
+export PYSPARK_DRIVER_PYTHON=jupyter
+export PYSPARK_DRIVER_PYTHON_OPTS='notebook'
+<Path to Spark downloaded n uninstalled>/bin/pyspark
+```
+This opens a Jupyter Server
+
+Anaconda Virtual Env
+Creating Virtual Env
+```
+  conda create —name fluffy <python package like numpy>
+```
+To activate
+
+```
+activate fluffy
+  ```
+To deactivate
+```
+	deactivate fluffy
+  ```
+Once in the env, when you need new packages,
+```
+	conda install <new package like pandas>
+  ```
+To install specific packages
+```
+	conda create —name pythonOld python=2.7 <more packages like numpy>..
+  ```
