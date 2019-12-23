@@ -94,6 +94,25 @@ Spark Streaming for stateful operations needs metadata checkpointing. But there 
 	Checkpoints can’t survive Spark Version Upgrades
 	Checkpoints need to be cleared between Code Upgrades
 
+Spark Security Cool stuff
+```
+	echo "spark.jdbc.b64password=$(echo -n test_pass_prop | base64)" > credentials_b64.properties
+	spark-submit --properties-file credentials_b64.properties
+	val password = new String(Base64.getDecoder().decode(spark.conf.get("spark.jdbc.b64password")), StandardCharsets.UTF_8)
+```
+
+Spark notes:
+	Scala’s built in .par functionality, which can operate on iterables
+		only you can only rely on its usage for aspects of your pipeline that are completely deterministic and provide no risk of a race condition
+	join in cols that have nulls
+	behavior of a UDF is to not have a materialized value until an action is performed.
+		creating an id column using Spark’s built-in monotonically_increasing_id, and then trying to join on that column. If you do not place an action between the generation of those ids (such as checkpointing), your values have not been materialized. The result will be non-deterministic!
+
+* “java.net.SocketTimeoutException: Write timed out” might mean you have set your number of partitions too high, and the filesystem is too slow at handling the number of simultaneous writes Spark is attempting to execute.
+* “Total size of serialized results… is bigger than spark.driver.maxResultSize” could mean you’ve set your number of partitions too high and results can’t fit onto a particular worker.
+* “Column x is not a member of table y”: You ran half your pipeline just to discover this sql join error. Front-load your run-time execution with validation to avoid having to reverse engineer these errors.
+* Sometimes you will get a real out of memory error, but the forensic work will be to understand why: Yes, you can increase the size of your individual workers to make this problem disappear, but before you do that, you should always ask yourself, “is the data well distributed?”
+* “Connection reset by peer” often implies you have skewed data and one particular worker has run out of memory.
 
 
 
