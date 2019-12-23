@@ -1,0 +1,130 @@
+package CommentsService;
+
+import javax.xml.stream.events.Comment;
+import java.util.*;
+
+public class AppStarter {
+    static List<CommentsBean> sampleComments = new LinkedList();
+    static CommentsBean commentsBean1 = new CommentsBean();
+    static CommentsBean commentsBean2 = new CommentsBean();
+    static CommentsBean commentsBean3 = new CommentsBean();
+    static CommentsBean commentsBean4 = new CommentsBean();
+    static CommentsBean commentsBean5 = new CommentsBean();
+    static CommentsBean commentsBean6 = new CommentsBean();
+    static {
+        commentsBean1.setArticleId(101);
+        commentsBean1.setCommentorId(201);
+        commentsBean1.setCommentsId(301);
+        commentsBean1.setCommentBody("nice work!");
+        commentsBean1.setParentId(101);
+        commentsBean1.setCreatedTS(System.currentTimeMillis());
+        commentsBean1.setUpdatedTS(System.currentTimeMillis());
+
+
+        commentsBean2.setArticleId(101);
+        commentsBean2.setCommentorId(202);
+        commentsBean2.setCommentsId(302);
+        commentsBean2.setCommentBody("not your best work!");
+        commentsBean2.setParentId(101);
+        commentsBean2.setCreatedTS(System.currentTimeMillis());
+        commentsBean2.setUpdatedTS(System.currentTimeMillis());
+
+        commentsBean3.setArticleId(101);
+        commentsBean3.setCommentorId(201);
+        commentsBean3.setCommentsId(303);
+        commentsBean3.setCommentBody("its good");
+        commentsBean3.setParentId(302);
+        commentsBean3.setCreatedTS(System.currentTimeMillis());
+        commentsBean3.setUpdatedTS(System.currentTimeMillis());
+
+        commentsBean4.setArticleId(101);
+        commentsBean4.setCommentorId(202);
+        commentsBean4.setCommentsId(304);
+        commentsBean4.setCommentBody("my opinion");
+        commentsBean4.setParentId(303);
+        commentsBean4.setCreatedTS(System.currentTimeMillis());
+        commentsBean4.setUpdatedTS(System.currentTimeMillis());
+
+        commentsBean5.setArticleId(102);
+        commentsBean5.setCommentorId(201);
+        commentsBean5.setCommentsId(305);
+        commentsBean5.setCommentBody("I dont agree with this");
+        commentsBean5.setParentId(102);
+        commentsBean5.setCreatedTS(System.currentTimeMillis());
+        commentsBean5.setUpdatedTS(System.currentTimeMillis());
+
+        commentsBean6.setArticleId(102);
+        commentsBean6.setCommentorId(201);
+        commentsBean6.setCommentsId(306);
+        commentsBean6.setCommentBody("I mean there are more aspects");
+        commentsBean6.setParentId(305);
+        commentsBean6.setCreatedTS(System.currentTimeMillis());
+        commentsBean6.setUpdatedTS(System.currentTimeMillis());
+
+        sampleComments.add(commentsBean1);
+        sampleComments.add(commentsBean2);
+        sampleComments.add(commentsBean3);
+        sampleComments.add(commentsBean4);
+        sampleComments.add(commentsBean5);
+        sampleComments.add(commentsBean6);
+    }
+
+    private void dfs(CommentsBean comment, Map<Long, Set<CommentsBean>> map, int level){
+        System.out.println();
+        for(int i=0;i<level;i++)
+            System.out.print("\t");
+        System.out.print(comment.getCommentBody());
+        Set<CommentsBean> children = map.get(comment.getCommentsId());
+        if(children != null) {
+            for (CommentsBean child : children) {
+                dfs(child, map, level + 1);
+            }
+        }else{
+            return;
+        }
+    }
+    private void display(Map<Long, Set<CommentsBean>> renderMap){
+        for(Long id:renderMap.keySet()) {
+            System.out.print(id + "\t");
+            Set<CommentsBean> commentsBeans = renderMap.get(id);
+            for(CommentsBean cb : commentsBeans){
+                System.out.print(cb.getCommentBody()+"\t");
+            }
+            System.out.println();
+        }
+    }
+    private void renderComments(long articleId){
+        Map<Long, Set<CommentsBean>> renderMap = new HashMap<>();
+        Set<CommentsBean>  children;
+        for(CommentsBean comment : sampleComments){
+            if(comment.getArticleId()==articleId){
+                if(renderMap.containsKey(comment.getParentId())){
+                    children = renderMap.get(comment.getParentId()) ;
+                    children.add(comment);
+                    renderMap.put(comment.getParentId(), children);
+
+                }else{
+                    children = new HashSet<>();
+                    children.add(comment);
+                    renderMap.put(comment.getParentId(), children);
+
+                }
+            }
+        }
+        display(renderMap);
+        for(CommentsBean comment: renderMap.get(articleId)){
+            int level = 0;
+            dfs(comment, renderMap, level);
+        }
+
+    }
+    public static void main(String[] args){
+
+//      CommentsOps commentOps = new CommentsOps();
+//      commentOps.getCommentsList(101);
+
+        AppStarter appStarter = new AppStarter();
+        appStarter.renderComments(101);
+    }
+
+}
